@@ -2,7 +2,7 @@
 
 # Description
     - A turn based, character building RPG 
-    with with a random encounter battle mechanic
+    with with a random battle mechanic
 
 # User Stories
     - A user can:
@@ -16,12 +16,12 @@
     - React
     - Python
     - Flask
-    - Bootstrap
+    - Tailwind
     - Redux
 
 # Wireframe
 
-    - https://dbdiagram.io/d
+    - https://dbdiagram.io/d/644be3d0dca9fb07c437577b
 
 # MVP 
 
@@ -30,8 +30,11 @@
     - Get User and Monster info to render the screen
     - Appl logic to battle
     - Create a login 
+    - Invoke a delete method when character dies and the user is loged out and taken to main screen
 
 
 # Streach Goals
 
-    - Create a save function
+    - Create a save function for users character stats
+    - Manage the users inventory system
+

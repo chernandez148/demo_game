@@ -20,8 +20,8 @@ function App() {
     }, 8000);
   });
 
-  const showCreditsP1 = fadeInP1 == true ? "opacity-1" : "opacity-0"
-  const showCreditsP2 = fadeInP2 == true ? "opacity-1" : "opacity-0"
+  const showCreditsP1 = fadeInP1 === true ? "opacity-1" : "opacity-0"
+  const showCreditsP2 = fadeInP2 === true ? "opacity-1" : "opacity-0"
 
   return (
     <div className='App vh-100 d-flex flex-column align-items-center justify-content-center'>
