@@ -5,7 +5,7 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 
 
-function LogInForm({ handleFadeOut, fadeIn, updateUser }) {
+function LogInForm({ handleFadeOut, fadeIn, setFadeIn, updateUser }) {
     const navigate = useNavigate()
 
     const formSchema = yup.object().shape({
@@ -20,6 +20,8 @@ function LogInForm({ handleFadeOut, fadeIn, updateUser }) {
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
+            setFadeIn(false)
+
             fetch('/login', {
                 method: "POST",
                 headers: {
@@ -49,7 +51,7 @@ function LogInForm({ handleFadeOut, fadeIn, updateUser }) {
                 {formik.errors && (
                     <>
                         <input
-                            className='mb-4 border rounded-0 p-1'
+                            className='mb-4 border rounded-0 p-1 text-black'
                             type="text"
                             placeholder='Username'
                             name='username'
@@ -58,7 +60,7 @@ function LogInForm({ handleFadeOut, fadeIn, updateUser }) {
                         />
                         <span>{formik.errors.username}</span>
                         <input
-                            className='border rounded-0 p-1'
+                            className='border rounded-0 p-1 text-black'
                             type="password"
                             placeholder='Password'
                             name='password'
