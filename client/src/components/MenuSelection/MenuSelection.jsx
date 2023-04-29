@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { Link, Outlet } from "react-router-dom";
 import LogInForm from '../LogInForm/LogInForm';
-import { Link } from "react-router-dom";
 import './MenuSelection.css'
 
 
 function MenuSelection({ updateUser, user }) {
     const [fadeIn, setFadeIn] = useState(false)
+    const [logIn, setLogIn] = useState(false)
+    const [hide, setHide] = useState(false)
+    console.log(logIn)
+
     const navigate = useNavigate()
 
     const handleFade = () => {
@@ -17,7 +21,14 @@ function MenuSelection({ updateUser, user }) {
         setFadeIn(false)
     }
 
+    const handleLogIn = () => {
+        setLogIn(true)
+    }
+
     const logout = () => {
+        setHide(false)
+        setFadeIn(false)
+
         fetch("/logout", {
             method: "DELETE",
         }).then(res => {
@@ -33,16 +44,18 @@ function MenuSelection({ updateUser, user }) {
             <nav>
                 <ul>
                     <li>
-                        {!user ? <Link onClick={handleFade}>Log In</Link> : <Link to="/character_selection">Demo</Link>}
+                        {!user ? <Link onClick={() => { handleFade(); handleLogIn(); }}>Log In</Link> : <Link to="/character_selection">Demo</Link>}
                     </li>
 
                     <li>
-                        {!user ? <Link to="/signup">Sign Up</Link> : <Link>Options</Link>}
+                        {!user ? <Link onClick={handleFade}>Sign Up</Link> : <Link>Options</Link>}
                     </li>
                     {!user ? "" : <li><Link onClick={logout}>Log Out</Link></li>}
                 </ul>
             </nav>
-            <LogInForm fadeIn={fadeIn} setFadeIn={setFadeIn} handleFadeOut={handleFadeOut} updateUser={updateUser} />
+            <Outlet />
+
+            <LogInForm logIn={logIn} fadeIn={fadeIn} handleFadeOut={handleFadeOut} hide={hide} setHide={setHide} updateUser={updateUser} />
         </div>
     )
 }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import MenuSelection from '../MenuSelection/MenuSelection'
-import SignUpForm from '../SignUpForm/SignUpForm';
 import CharacterSelection from '../CharacterSelection/CharacterSelection';
 import './MainMenu.css'
 
@@ -45,14 +44,10 @@ function MainMenu() {
 
     return (
         <div className={`MainMenu h-full ${backgroundFadeIn}`}>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<MenuSelection user={user} updateUser={updateUser} />}>
-                        <Route exact path="/signup" element={<SignUpForm />} />
-                        <Route exact path='/character_selection' element={<CharacterSelection />} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
+            <Routes>
+                <Route exact path="/" element={<MenuSelection user={user} updateUser={updateUser} />} />
+                <Route exact path='/character_selection' element={<CharacterSelection />} />
+            </Routes>
         </div>
     )
 }
