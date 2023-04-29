@@ -5,7 +5,9 @@ import SignUpForm from '../SignUpForm/SignUpForm';
 import './MainMenu.css'
 
 function MainMenu() {
+    const [user, setUser] = useState(null)
     const [fadeIn, setfFdeIn] = useState(false)
+    console.log(user)
 
     useEffect(() => {
         const MainMenuFadeIn = setTimeout(() => {
@@ -19,11 +21,13 @@ function MainMenu() {
 
     const backgroundFadeIn = fadeIn ? "fadeIn" : ""
 
+    const updateUser = (user) => setUser(user)
+
     return (
         <div className={`MainMenu h-full ${backgroundFadeIn}`}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<MenuSelection />}>
+                    <Route path="/" element={<MenuSelection updateUser={updateUser} />}>
                         <Route path="/signup" element={<SignUpForm />} />
                     </Route>
                 </Routes>

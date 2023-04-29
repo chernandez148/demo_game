@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import './MenuSelection.css'
 
 
-function MenuSelection() {
+function MenuSelection({ updateUser }) {
     const [fadeIn, setFadeIn] = useState(false)
 
     const handleFade = () => {
@@ -28,7 +28,7 @@ function MenuSelection() {
                     </li>
                 </ul>
             </nav>
-            <LogInForm fadeIn={fadeIn} handleFadeOut={handleFadeOut} />
+            <LogInForm fadeIn={fadeIn} handleFadeOut={handleFadeOut} updateUser={updateUser} />
         </div>
     )
 }
