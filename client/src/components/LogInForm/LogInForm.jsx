@@ -3,26 +3,35 @@ import { IoClose } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import "./LogInForm.css"
 
 
 function LogInForm({ handleFadeOut, fadeIn, hide, setHide, updateUser, logIn }) {
     const navigate = useNavigate()
 
     const formSchema = yup.object().shape({
+        fname: yup.string(),
+        lname: yup.string(),
         username: yup.string().required("Please enter your username"),
+        dob: yup.string(),
+        email: yup.string().email(),
         password: yup.string().required("Please enter your password"),
     });
 
     const formik = useFormik({
         initialValues: {
+            fname: "",
+            lname: "",
             username: "Noah Carr",
+            dob: "",
+            email: "",
             password: "7777",
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
             setHide(true)
 
-            fetch('/login', {
+            fetch(logIn ? '/login' : '/signup', {
                 method: "POST",
                 headers: {
                     'Content-Type': "application/json",
@@ -45,48 +54,76 @@ function LogInForm({ handleFadeOut, fadeIn, hide, setHide, updateUser, logIn }) 
     const displayNone = !hide ? "block" : "hidden"
 
     return (
-        <div className={`model-box bg-dark px-3 py-5 ${modelMox} ${displayNone}`}>
+        <div className={`model-box bg-dark px-5 py-8 border ${modelMox} ${displayNone}`}>
             <IoClose className='cursor-pointer float-right' onClick={handleFadeOut} />
-            <h2 className='mt-4 mb-4'>Sign In</h2>
+            <h2 className='mt-4 mb-4'>{logIn ? "Sign In" : "Sign Up"}</h2>
             <form className='flex flex-col'>
                 {formik.errors && (
                     <>
-                        <input
-                            className='mb-4 border rounded-0 p-1 text-black'
-                            type="text"
-                            placeholder='First Name'
-                            onChange={formik.handleChange}
-                            value={formik.values.fname}
-                        />
-                        {logIn && (
+                        {!logIn && (
                             <>
                                 <input
                                     className='mb-4 border rounded-0 p-1 text-black'
                                     type="text"
-                                    placeholder='Username'
-                                    name='username'
+                                    placeholder='First Name'
+                                    name='fname'
                                     onChange={formik.handleChange}
-                                    value={formik.values.username}
+                                    value={formik.values.fname}
                                 />
-                                <span>{formik.errors.username}</span>
+                                <span>{formik.errors.fname}</span>
+                                <input
+                                    className='mb-4 border rounded-0 p-1 text-black'
+                                    type="text"
+                                    placeholder='Last Name'
+                                    name='lname'
+                                    onChange={formik.handleChange}
+                                    value={formik.values.lname}
+                                />
+                                <span>{formik.errors.lname}</span>
                             </>
 
                         )}
+                        <input
+                            className='mb-4 border rounded-0 p-1 text-black'
+                            type="text"
+                            placeholder='Username'
+                            name='username'
+                            onChange={formik.handleChange}
+                            value={formik.values.username}
+                        />
+                        <span>{formik.errors.username}</span>
 
-                        {logIn && (
+                        {!logIn && (
                             <>
                                 <input
-                                    className='border rounded-0 p-1 text-black'
-                                    type="password"
-                                    placeholder='Password'
-                                    name='password'
+                                    className='mb-4 border rounded-0 p-1 text-black'
+                                    type="date"
+                                    placeholder='MM/DD/YYYY'
+                                    name='dob'
                                     onChange={formik.handleChange}
-                                    value={formik.values.password}
+                                    value={formik.values.dob}
                                 />
-                                <span>{formik.errors.password}</span>
+                                <span>{formik.errors.dob}</span>
+                                <input
+                                    className='mb-4 border rounded-0 p-1 text-black'
+                                    type="email"
+                                    placeholder='Email'
+                                    name='email'
+                                    onChange={formik.handleChange}
+                                    value={formik.values.email}
+                                />
+                                <span>{formik.errors.email}</span>
                             </>
                         )}
-
+                        <input
+                            className='border rounded-0 p-1 text-black'
+                            type="password"
+                            placeholder='Password'
+                            name='password'
+                            onChange={formik.handleChange}
+                            value={formik.values.password}
+                        />
+                        <span>{formik.errors.password}</span>
                     </>
                 )}
                 <button className='mt-4 border rounded-0 p-1' type='submit' onClick={formik.handleSubmit}>Sign In</button>

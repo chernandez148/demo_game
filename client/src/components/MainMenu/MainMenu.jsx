@@ -17,7 +17,7 @@ function MainMenu() {
     const mainMenu = () => {
         const MainMenuFadeIn = setTimeout(() => {
             setfFdeIn(true);
-        }, 10000);
+        }, 10);
 
         return () => {
             clearTimeout(MainMenuFadeIn);

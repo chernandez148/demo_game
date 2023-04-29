@@ -25,6 +25,10 @@ function MenuSelection({ updateUser, user }) {
         setLogIn(true)
     }
 
+    const handleSignUp = () => {
+        setLogIn(false)
+    }
+
     const logout = () => {
         setHide(false)
         setFadeIn(false)
@@ -48,7 +52,7 @@ function MenuSelection({ updateUser, user }) {
                     </li>
 
                     <li>
-                        {!user ? <Link onClick={handleFade}>Sign Up</Link> : <Link>Options</Link>}
+                        {!user ? <Link onClick={() => { handleFade(); handleSignUp() }}>Sign Up</Link> : <Link>Options</Link>}
                     </li>
                     {!user ? "" : <li><Link onClick={logout}>Log Out</Link></li>}
                 </ul>
