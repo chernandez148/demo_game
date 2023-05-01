@@ -6,22 +6,40 @@ import './MainMenu.css'
 
 function MainMenu() {
     const [user, setUser] = useState(null)
-    const [fadeIn, setfFdeIn] = useState(false)
+    const [fadeIn, setfFadeIn] = useState(false)
+    const [character, setCharacter] = useState([])
+    const [jobData, setJobData] = useState([])
     console.log(user)
+    console.log(character)
+    console.log(jobData)
 
     useEffect(() => {
         mainMenu()
         fetchUser()
+        fetchJobStats()
+        fetchCharacters()
     }, []);
 
     const mainMenu = () => {
         const MainMenuFadeIn = setTimeout(() => {
-            setfFdeIn(true);
-        }, 10);
+            setfFadeIn(true);
+        }, 10000);
 
         return () => {
             clearTimeout(MainMenuFadeIn);
         };
+    }
+
+    const fetchJobStats = () => {
+        fetch("/job_stats")
+            .then(resp => resp.json())
+            .then(data => setJobData(data))
+    }
+
+    const fetchCharacters = () => {
+        fetch("/character")
+            .then(resp => resp.json())
+            .then(data => setCharacter(data))
     }
 
     const fetchUser = () => {
@@ -40,13 +58,15 @@ function MainMenu() {
 
     const backgroundFadeIn = fadeIn ? "fadeIn" : ""
 
+    const addCharacter = (character) => setCharacter(current => [...current, character])
+
     const updateUser = (user) => setUser(user)
 
     return (
         <div className={`MainMenu h-full ${backgroundFadeIn}`}>
             <Routes>
-                <Route exact path="/" element={<MenuSelection user={user} updateUser={updateUser} />} />
-                <Route exact path='/character_selection' element={<CharacterSelection />} />
+                <Route exact path="/" element={<MenuSelection user={user} updateUser={updateUser} setfFadeIn={setfFadeIn} />} />
+                <Route exact path='/character_selection' element={<CharacterSelection setfFadeIn={setfFadeIn} jobData={jobData} addCharacter={addCharacter} />} />
             </Routes>
         </div>
     )

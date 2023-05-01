@@ -28,56 +28,113 @@ if __name__ == '__main__':
     with app.app_context():
         print("Starting seed...")
 
-        # Generate users
-        for i in range(5):
-            user = User(
-                fname=fake.first_name(),
-                lname=fake.last_name(),
-                username=fake.user_name(),
-                email=fake.email(),
-                dob=fake.date_of_birth(),
-                password=fake.password(),
-            )
-            db.session.add(user)
 
-        # Generate characters for each user
-        for user in User.query.all():
-            for i in range(3):
-                character = Character(
-                    fname=fake.first_name(),
-                    lname=fake.last_name(),
-                    gender=rc(GENDERS),
-                    sex=rc(SEXUAL_ORIENTATIONS),
-                    job=rc(JOBS),
-                    region=rc(REGIONS),
-                    user=user,
-                )
-                db.session.add(character)
-
-        # Generate job stats for each character
-        for character in Character.query.all():
-            job_stats = JobStats(
-                hp=randint(100, MAX_HP),
-                lvl=randint(1, MAX_LEVEL),
-                mg=randint(50, MAX_MG),
-                strg=randint(1, MAX_STATS),
-                defn=randint(1, MAX_STATS),
-                mind=randint(1, MAX_STATS),
-                intl=randint(1, MAX_STATS),
-                spd=randint(1, MAX_STATS),
-                evad=randint(1, MAX_STATS),
-                character_id=character.id,
-            )
-            db.session.add(job_stats)
-
-            # Generate inventory for each character
-            potion = Inventory(
-                qty=randint(0, MAX_QTY),
-                name=ITEM_NAME,
-                description=ITEM_DESCRIPTION,
-                character_id=character.id,
-            )
-            db.session.add(potion)
+        # Generate job stats for each job
+        knight = JobStats(
+            job_image="https://drive.google.com/file/d/1-9E7n7FgvwLD1E2O3N0WM5bQfqeSk_Se/view?usp=sharing",
+            job="Knight",
+            lvl=1,
+            hp=620,
+            mg=60,
+            strg=50,
+            defn=82,
+            mind=75,
+            intl=20,
+            spd=25,
+            evad=60,
+        )
+        gunslinger = JobStats(
+            job_image="https://drive.google.com/file/d/1-9E7n7FgvwLD1E2O3N0WM5bQfqeSk_Se/view?usp=sharing",
+            job="Gunslinger",
+            lvl=1,
+            hp=580,
+            mg=90,
+            strg=72,
+            defn=68,
+            mind=35,
+            intl=35,
+            spd=70,
+            evad=70,
+        )
+        archer = JobStats(
+            job_image="https://drive.google.com/file/d/1-9E7n7FgvwLD1E2O3N0WM5bQfqeSk_Se/view?usp=sharing",
+            job="Archer",
+            lvl=1,
+            hp=540,
+            mg=80,
+            strg=70,
+            defn=58,
+            mind=45,
+            intl=40,
+            spd=90,
+            evad=85,
+        )
+        thief = JobStats(
+            job_image="https://drive.google.com/file/d/1-9E7n7FgvwLD1E2O3N0WM5bQfqeSk_Se/view?usp=sharing",
+            job="Thief",
+            lvl=1,
+            hp=580,
+            mg=60,
+            strg=72,
+            defn=55,
+            mind=50,
+            intl=48,
+            spd=102,
+            evad=100,
+        )
+        warrior = JobStats(
+            job_image="https://drive.google.com/file/d/1-9E7n7FgvwLD1E2O3N0WM5bQfqeSk_Se/view?usp=sharing",
+            job="Warrior",
+            lvl=1,
+            hp=670,
+            mg=45,
+            strg=80,
+            defn=75,
+            mind=30,
+            intl=30,
+            spd=60,
+            evad=65,
+        )
+        berserker = JobStats(
+            job_image="https://drive.google.com/file/d/1-9E7n7FgvwLD1E2O3N0WM5bQfqeSk_Se/view?usp=sharing",
+            job="Berserker",
+            lvl=1,
+            hp=800,
+            mg=20,
+            strg=90,
+            defn=50,
+            mind=30,
+            intl=30,
+            spd=50,
+            evad=55,
+        )
+        white_mage = JobStats(
+            job_image="https://drive.google.com/file/d/1-9E7n7FgvwLD1E2O3N0WM5bQfqeSk_Se/view?usp=sharing",
+            job="White Mage",
+            lvl=1,
+            hp=520,
+            mg=120,
+            strg=30,
+            defn=50,
+            mind=80,
+            intl=85,
+            spd=45,
+            evad=50,
+        )
+        black_mage = JobStats(
+            job_image="https://drive.google.com/file/d/1-9E7n7FgvwLD1E2O3N0WM5bQfqeSk_Se/view?usp=sharing",
+            job="Black Mage",
+            lvl=1,
+            hp=520,
+            mg=120,
+            strg=30,
+            defn=50,
+            mind=80,
+            intl=85,
+            spd=45,
+            evad=50,
+        )
+        db.session.add_all([knight, gunslinger, archer, thief, warrior, berserker, white_mage, black_mage])
 
         # Generate bestiary
         for i in range(8):

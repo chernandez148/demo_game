@@ -66,6 +66,7 @@ class Logout(Resource):
 api.add_resource(Logout, '/logout')
 
 class AuthorizedSession(Resource):
+
     def get(self):
         try:
             user = User.query.filter_by(id=session['user_id']).first()
@@ -85,13 +86,11 @@ class CharacterCreation(Resource):
         data = request.get_json()
         
         new_character = Character(
-            fname=data['fname'],
-            lname=data['lname'],
-            gender=data['gender'],
+            character_name=data['character_name'],
+            pronouns=data['pronouns'],
             sex=data['sex'],
-            jobs=data['job'],
-            region=data['region'],
-        )
+            job_stats_id=data['job_stats_id'],
+            region=data['region']        )
         db.session.add(new_character)
         db.session.commit()
 
@@ -111,6 +110,14 @@ class Characters(Resource):
         return make_response(jsonify(character), 200)
 
 api.add_resource(Characters, '/character')
+
+class JobStatistics(Resource):
+
+    def get(self):
+        job_stat = [j.to_dict() for j in JobStats.query.all()]
+        return make_response(jsonify(job_stat), 200)
+    
+api.add_resource(JobStatistics, '/job_stats')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

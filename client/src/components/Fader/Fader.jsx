@@ -8,19 +8,19 @@ const Fader = () => {
     useEffect(() => {
         setTimeout(() => {
             setFade(true);
-        }, 2);
+        }, 2000);
 
         setTimeout(() => {
             setFade(false);
-        }, 4);
+        }, 4000);
 
         setTimeout(() => {
             setSecondFade(true);
-        }, 6);
+        }, 6000);
 
         const fadeOutTimeout = setTimeout(() => {
             setSecondFade(false);
-        }, 8);
+        }, 8000);
 
         return () => {
             clearTimeout(fadeOutTimeout);

@@ -5,10 +5,11 @@ import LogInForm from '../LogInForm/LogInForm';
 import './MenuSelection.css'
 
 
-function MenuSelection({ updateUser, user }) {
+function MenuSelection({ updateUser, user, setfFadeIn }) {
     const [fadeIn, setFadeIn] = useState(false)
     const [logIn, setLogIn] = useState(false)
     const [hide, setHide] = useState(false)
+    const [characterSelectBG, setCharacterSelectBG] = useState(false)
     console.log(logIn)
 
     const navigate = useNavigate()
@@ -43,12 +44,16 @@ function MenuSelection({ updateUser, user }) {
         })
     }
 
+    const handleCharacterScreen = () => {
+        setCharacterSelectBG(true)
+    }
+
     return (
         <div className='MenuSelection h-full flex items-end text-white pl-28 pb-36'>
             <nav>
                 <ul>
                     <li>
-                        {!user ? <Link onClick={() => { handleFade(); handleLogIn(); }}>Log In</Link> : <Link to="/character_selection">Demo</Link>}
+                        {!user ? <Link onClick={() => { handleFade(); handleLogIn(); }}>Log In</Link> : <Link onClick={handleCharacterScreen} to="/character_selection">Demo</Link>}
                     </li>
 
                     <li>

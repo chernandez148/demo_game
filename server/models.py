@@ -1,4 +1,5 @@
 from sqlalchemy_serializer import SerializerMixin
+from flask import session
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import Enum, event
@@ -55,13 +56,9 @@ class Character(db.Model, SerializerMixin):
     __tablename__ = "characters"
 
     id = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String)
-    lname = db.Column(db.String)
-    gender = db.Column(db.String, nullable=False)
+    character_name = db.Column(db.String)
+    pronouns = db.Column(db.String, nullable=False)
     sex = db.Column(db.String, nullable=False)
-    job = db.Column(Enum(
-        'Knight', 'Gunslinger', 'Archer', 'Thief', 'Warrior', 'Berserker', 'Black Mage', 'White Mage'
-    ), nullable=False)
     region = db.Column(Enum(
         "Nemar", "Cyneil", "Corize", "Naurra Isles", "Ausstero"
     ), nullable=False)
@@ -70,24 +67,22 @@ class Character(db.Model, SerializerMixin):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    job_stats_id = db.Column(db.Integer, db.ForeignKey("job_stats.id"))
 
-    job_stats = db.relationship("JobStats", backref="character")
-    inventory = db.relationship("Inventory", backref="character")
+    inventories = db.relationship("Inventory", backref="character")
 
-    serialize_rules = ('-created_at', '-updated_at', '-job_stats', '-inventory', '-user_id')
+    serialize_rules = ('-created_at', '-updated_at', '-job_stats_id', '-inventory', '-user_id')   
 
-    @staticmethod
-    def after_insert_listener(target):
-        job_stats = JobStats(character=target)
-        db.session.add(job_stats)
-        db.session.commit()
-
-        event.listen(Character, 'after_insert', Character.after_insert_listener)    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.user_id = session['user_id']
 
 class JobStats(db.Model, SerializerMixin):
     __tablename__ = "job_stats"
 
     id = db.Column(db.Integer, primary_key=True)
+    job_image = db.Column(db.String)
+    job = db.Column(db.String)
     lvl = db.Column(db.Integer)
     hp = db.Column(db.Integer)
     mg = db.Column(db.Integer)
@@ -101,9 +96,9 @@ class JobStats(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    character_id = db.Column(db.Integer, db.ForeignKey("characters.id"))
+    characters = db.relationship("Character", backref="job_stats")
 
-    serialize_rules = ('-created_at', '-updated_at', '-character_id')
+    serialize_rules = ('-created_at', '-updated_at', '-characters')
 
 class Inventory(db.Model, SerializerMixin):
     __tablename__ = "inventories"
