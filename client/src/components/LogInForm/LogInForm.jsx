@@ -22,7 +22,7 @@ function LogInForm({ handleFadeOut, fadeIn, hide, setHide, updateUser, logIn }) 
         initialValues: {
             fname: "",
             lname: "",
-            username: "Noah Carr",
+            username: "NoahCarr",
             dob: "",
             email: "",
             password: "7777",

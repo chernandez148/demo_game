@@ -24,6 +24,8 @@ import './CharacterSelection.css'
 
 function CharacterSelection({ setfFadeIn, jobData, addCharacter }) {
     const [characterSelectionBG, setCharacterSelectionBG] = useState(false)
+    const [confirm, setConfirm] = useState(false)
+    console.log(confirm)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -44,6 +46,16 @@ function CharacterSelection({ setfFadeIn, jobData, addCharacter }) {
             clearTimeout(fadeOutTimeout);
         };
     }, []);
+
+    const handleConfirm = () => {
+        setConfirm(true)
+    }
+
+    const handleCancel = () => {
+        setConfirm(false)
+    }
+
+    const showConfirm = confirm ? "block z-index0 confirmBox absolute w-full h-full top-0 right-0 z-index-2" : "hidden"
 
     const formSchema = yup.object().shape({
         character_name: yup.string().required("Please enter a username."),
@@ -78,9 +90,11 @@ function CharacterSelection({ setfFadeIn, jobData, addCharacter }) {
                 .then(resp => resp.json())
                 .then(character => {
                     addCharacter(character)
+                    navigate("/game")
                 })
         }
     })
+
     const showCharacterSelect = characterSelectionBG ? "opacity-1" : 'opacity-0'
 
 
@@ -94,20 +108,21 @@ function CharacterSelection({ setfFadeIn, jobData, addCharacter }) {
             <div className='ps-40 flex flex-row h-full'>
                 <div className='personal-information basis-1/2 py-10'>
                     <h1 className='text-white text-lg pb-5'>DATABASE: <span className='ms-4'>PERSONAL INFORMATION</span></h1>
-                    <form className='basis-1/2 flex flex-row flex-wrap'>
+                    <form className='basis-1/2 flex flex-row flex-wrap' onSubmit={formik.handleSubmit}>
                         {formik.errors && (
                             <>
                                 <div className='basis-1/3 flex flex-col'>
-                                    <label htmlFor="username">USERNAME:</label>
+                                    <label htmlFor="character_name">USERNAME:</label>
                                     <label htmlFor="pronouns">PRONOUNS:</label>
                                     <label htmlFor="region">REGION:</label>
                                     <label htmlFor="sex">SEX:</label>
-                                    <label htmlFor="job">JOB:</label>
+                                    <label htmlFor="job_stats_id">JOB:</label>
                                 </div>
                                 <div className='basis-1/3 flex flex-col'>
                                     <input
                                         className='border rounded-0 text-black'
                                         type="text"
+                                        id='character_name'
                                         name='character_name'
                                         placeholder='Username'
                                         onChange={formik.handleChange}
@@ -117,39 +132,42 @@ function CharacterSelection({ setfFadeIn, jobData, addCharacter }) {
                                     <input
                                         className='border rounded-0 text-black'
                                         type="text"
-                                        placeholder='Pronouns'
+                                        id='pronouns'
                                         name='pronouns'
+                                        placeholder='Pronouns'
                                         onChange={formik.handleChange}
                                         value={formik.values.pronouns}
                                     />
                                     <span>{formik.errors.pronouns}</span>
-                                    <select name="region" value={formik.values.region} onChange={formik.handleChange}>
+                                    <select id='region' name="region" value={formik.values.region} onChange={formik.handleChange}>
                                         <option value="Nemar">Nemar</option>
                                         <option value="Cyneil">Cyneil</option>
                                         <option value="Corize">Corize</option>
                                         <option value="Naurra Isles">Naurra Isles</option>
                                         <option value="Ausstero">Ausstero</option>
                                     </select>
-                                    {formik.errors.region}
+                                    <span>{formik.errors.region}</span>
                                     <div className="sex">
                                         <input
                                             className='form-check-input'
                                             type="radio"
+                                            id='male'
                                             name="sex"
                                             value="male"
                                             onChange={formik.handleChange}
                                             checked={formik.values.sex === 'male'}
                                         />
-                                        <label className='form-check-label'>Male</label>
+                                        <label className='form-check-label' htmlFor="male">Male</label>
                                         <input
                                             className='form-check-input'
                                             type="radio"
+                                            id='female'
                                             name="sex"
                                             value="female"
                                             onChange={formik.handleChange}
                                             checked={formik.values.sex === 'female'}
                                         />
-                                        <label className='form-check-label'>Female</label>
+                                        <label className='form-check-label' htmlFor="female">Female</label>
                                     </div>
                                     <span>{formik.errors.sex}</span>
                                 </div>
@@ -157,26 +175,29 @@ function CharacterSelection({ setfFadeIn, jobData, addCharacter }) {
                                     <input
                                         type="radio"
                                         id="jobStat-1"
+                                        name='job_stats_id'
                                         {...formik.getFieldProps('job_stats_id')}
                                         value="1"
                                     />
                                     <label htmlFor="jobStat-1">
-                                        {formik.values.sex === "male" ? <img src={MaleKnight} alt="" /> : <img src={FemaleKnight} />}
+                                        {formik.values.sex === "male" ? <img src={MaleKnight} alt="" /> : <img src={FemaleKnight} alt="" />}
                                     </label>
 
                                     <input
                                         type="radio"
                                         id="jobStat-2"
+                                        name='job_stats_id'
                                         {...formik.getFieldProps('job_stats_id')}
                                         value="2"
                                     />
                                     <label htmlFor="jobStat-2">
-                                        {formik.values.sex === "male" ? <img src={MaleGunslinger} alt="" /> : <img src={FemaleGunslinger} />}
+                                        {formik.values.sex === "male" ? <img src={MaleGunslinger} alt="" /> : <img src={FemaleGunslinger} alt="" />}
                                     </label>
 
                                     <input
                                         type="radio"
                                         id="jobStat-3"
+                                        name='job_stats_id'
                                         {...formik.getFieldProps('job_stats_id')}
                                         value="3"
                                     />
@@ -236,7 +257,18 @@ function CharacterSelection({ setfFadeIn, jobData, addCharacter }) {
 
                             </>
                         )}
-                        <button className='mt-4 border rounded-full p-1' type='submit' onClick={formik.handleSubmit}><BsArrowRightShort size={24} /></button>
+                        <button className='mt-4 border rounded-full p-1' type='button' onClick={handleConfirm}><BsArrowRightShort size={24} /></button>
+                        <div className={`${showConfirm}`}>
+                            <div className='w-full h-full flex items-center justify-center flex-col'>
+                                <div className='textBox text-center'>
+                                    <h2 className='text-white mb-5'>Are you sure?</h2>
+                                    <div className='felx flex row'>
+                                        <button className='me-5' type='submit'>Confirm</button>
+                                        <button type='button' onClick={handleCancel}>Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div className='job-stats basis-1/2 py-10 '>

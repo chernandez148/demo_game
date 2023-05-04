@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Routes, Route } from "react-router-dom";
 import MenuSelection from '../MenuSelection/MenuSelection'
 import CharacterSelection from '../CharacterSelection/CharacterSelection';
+import Game from '../Game/Game';
 import './MainMenu.css'
 
 function MainMenu() {
@@ -67,6 +68,7 @@ function MainMenu() {
             <Routes>
                 <Route exact path="/" element={<MenuSelection user={user} updateUser={updateUser} setfFadeIn={setfFadeIn} />} />
                 <Route exact path='/character_selection' element={<CharacterSelection setfFadeIn={setfFadeIn} jobData={jobData} addCharacter={addCharacter} />} />
+                <Route exact path='/game' element={<Game />} />
             </Routes>
         </div>
     )
